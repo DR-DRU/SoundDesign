@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 440185636}
   - component: {fileID: 440185635}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Planet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -499,13 +499,16 @@ MonoBehaviour:
   startingFuel: 100
   startSpeed: 500
   maxSpeed: 1000
-  acceleration: 10
-  deacceleration: 20
-  allowedSpeedUponImpact: 50
+  acceleration: 30
+  deacceleration: 50
+  allowedSpeedUponImpact: 100
+  allowedDistanceBeyondPlanetCenterPoint: 1000
+  allowedDistanceFromPlanetCenter: 100000
   rotationalSpeed: 0.01
-  fuelDrainagePerSecond: 0.1
+  fuelDrainagePerSecond: 4
   speedText: {fileID: 1174909778}
   fuelText: {fileID: 1764627381}
+  planet: {fileID: 440185638}
 --- !u!65 &963194230
 BoxCollider:
   m_ObjectHideFlags: 0

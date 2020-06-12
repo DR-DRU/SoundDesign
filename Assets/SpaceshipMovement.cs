@@ -11,6 +11,8 @@ public class SpaceshipMovement : MonoBehaviour
     public float acceleration;
     public float deacceleration;
     public float allowedSpeedUponImpact;
+    public float allowedDistanceBeyondPlanetCenterPoint;
+    public float allowedDistanceFromPlanetCenter;
     public float rotationalSpeed;
     public float fuelDrainagePerSecond;
     float currentSpeed;
@@ -20,7 +22,9 @@ public class SpaceshipMovement : MonoBehaviour
 
     public Text speedText;
     public Text fuelText;
+    public Transform planet;
 
+    bool landed;
 
 
     // Start is called before the first frame update
@@ -38,10 +42,31 @@ public class SpaceshipMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        if (!landed)
+        {
+            Movement();
+        }
 
-        speedText.text = "Speed: " + currentSpeed;
-        fuelText.text = "Fuel: " + currentFuel;
+        MissCheck();
+
+
+        speedText.text = "Speed: " + (int)currentSpeed;
+        fuelText.text = "Fuel: " + (int)currentFuel;
+
+
+    }
+
+    void MissCheck()
+    {
+        if (transform.position.y > planet.position.y + allowedDistanceBeyondPlanetCenterPoint)
+        {
+            Restart();
+        }
+        else if (Vector3.Distance(transform.position, planet.position) > allowedDistanceFromPlanetCenter)
+        {
+            Restart();
+        }
+
 
 
     }
@@ -62,7 +87,7 @@ public class SpaceshipMovement : MonoBehaviour
 
 
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && currentFuel > 0)
         {
             currentFuel -= fuelDrainagePerSecond * Time.deltaTime;
             currentSpeed -= deacceleration * Time.deltaTime;
@@ -109,7 +134,8 @@ public class SpaceshipMovement : MonoBehaviour
         }
         else
         {
-
+            landed = true;
+            currentSpeed = 0;
         }
            
 
