@@ -23,6 +23,14 @@ public class SpaceshipMovement : MonoBehaviour
 
     public Text speedText;
     public Text fuelText;
+
+    public Image rightArrow;
+    public Image leftArrow;
+    public Image speedBar;
+    public Image fuelBar;
+    public Image moonIcon;
+
+
     public Transform planet;
 
     bool landed;
@@ -99,8 +107,25 @@ public class SpaceshipMovement : MonoBehaviour
         MissCheck();
 
 
-        speedText.text = "Speed: " + (int)currentSpeed;
-        fuelText.text = "Fuel: " + (int)currentFuel;
+        //speedText.text = "Speed: " + (int)currentSpeed;
+        //fuelText.text = "Fuel: " + (int)currentFuel;
+
+        speedBar.fillAmount = currentSpeed / maxSpeed;
+        fuelBar.fillAmount = currentFuel / startingFuel;
+
+        //Vector3 angleHelp = transform.InverseTransformPoint(planet.position);
+        //float angle = Vector3.Angle(transform.position, planet.position);
+        // float angle = Vector3.Angle(Vector3.zero, someLocalVector);
+
+        //Vector3 toPosition = (planet.position - transform.position);
+        //float angle = Vector3.Angle(transform.forward, toPosition);
+
+        float angle = Vector3.SignedAngle(planet.position - transform.position, transform.forward, Vector3.up);
+        //float angle = Vector3.Angle(transform.forward, planet.position - transform.position);
+
+
+        print(angle);
+         
 
         distance = Vector3.Distance(transform.position, planet.position);
         distanceplaycooldown = (distance - 4000) / 10000;
@@ -108,7 +133,8 @@ public class SpaceshipMovement : MonoBehaviour
 
         if(distancetimer >= distanceplaycooldown)
         {
-            DistanceX = (planet.position.z - transform.position.z);
+    
+            DistanceX = (planet.position.x - transform.position.x);
             if(DistanceX > 6000)
             {
                 DistanceAudioSource.panStereo = 1;
@@ -212,6 +238,7 @@ public class SpaceshipMovement : MonoBehaviour
             FailTimer += Time.deltaTime;
             if (FailTimer >= 3)
             {
+                
                 Restart();
             }
         }
@@ -228,11 +255,7 @@ public class SpaceshipMovement : MonoBehaviour
             }
             failed = true;
             DistanceAudioSource.volume = 0;
-            FailTimer += Time.deltaTime;
-            if (FailTimer >= 3)
-            {
-                Restart();
-            }
+
             
         }
         else if (Vector3.Distance(transform.position, planet.position) > allowedDistanceFromPlanetCenter)
@@ -244,11 +267,7 @@ public class SpaceshipMovement : MonoBehaviour
             }
             failed = true;
             DistanceAudioSource.volume = 0;
-            FailTimer += Time.deltaTime;
-            if (FailTimer >= 3)
-            {
-                Restart();
-            }
+
         }
 
 
@@ -261,11 +280,24 @@ public class SpaceshipMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             transform.Rotate(0, -rotationalSpeed , 0);
+            //transform.Translate(-rotationalSpeed,0,0);
+            leftArrow.enabled = true;
+        }
+        else
+        {
+            leftArrow.enabled = false;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
             transform.Rotate(0, rotationalSpeed, 0);
+            //transform.Translate(rotationalSpeed, 0, 0);
+            rightArrow.enabled = true;
+        }
+        else
+        {
+            
+            rightArrow.enabled = false;
         }
 
 
