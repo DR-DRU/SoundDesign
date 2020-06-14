@@ -91,9 +91,12 @@ public class SpaceshipMovement : MonoBehaviour
     public Vector3 maxRightPosition; // 61
     public Vector3 midPosition;  //27.4 -189.5
 
+    public Text success;
+
     // Start is called before the first frame update
     void Start()
     {
+        success.enabled = false;
         startingPosition = transform.position;
         startingRotation = transform.eulerAngles;
 
@@ -116,6 +119,16 @@ public class SpaceshipMovement : MonoBehaviour
 
         MissCheck();
 
+
+        if (landed)
+        {
+            success.enabled = true;
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                
+                Restart();
+            }
+        }
 
         //speedText.text = "Speed: " + (int)currentSpeed;
         //fuelText.text = "Fuel: " + (int)currentFuel;
