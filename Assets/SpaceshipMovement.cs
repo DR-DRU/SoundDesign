@@ -26,6 +26,50 @@ public class SpaceshipMovement : MonoBehaviour
 
     bool landed;
 
+    [Header("Distance to Planet")]
+
+    float distance;
+    float distanceplaycooldown;
+    float distancetimer;
+
+    public AudioSource DistanceAudioSource;
+    public AudioClip Distancesound;
+    [Range(0, 1)] public float DistanceVolume;
+
+    public float DistanceX;
+
+    public AudioSource EngineAudioSource;
+    public AudioSource FuelAudioSource;
+    public AudioSource AIAudioSource;
+
+    public AudioClip AI90;
+    public AudioClip AI80;
+    public AudioClip AI70;
+    public AudioClip AI60;
+    public AudioClip AI50;
+    public AudioClip AI40;
+    public AudioClip AI30;
+    public AudioClip AI20;
+    public AudioClip AI10;
+    public AudioClip AI00;
+   
+
+    private bool AS90;
+    private bool AS80;
+    private bool AS70;
+    private bool AS60;
+    private bool AS50;
+    private bool AS40;
+    private bool AS30;
+    private bool AS20;
+    private bool AS10;
+    private bool AS00;
+
+    private float FailTimer;
+    public AudioSource EndAudioSource;
+    public AudioClip miss;
+    public AudioClip crash;
+    public AudioClip win;
 
     // Start is called before the first frame update
     void Start()
@@ -53,18 +97,134 @@ public class SpaceshipMovement : MonoBehaviour
         speedText.text = "Speed: " + (int)currentSpeed;
         fuelText.text = "Fuel: " + (int)currentFuel;
 
+        distance = Vector3.Distance(transform.position, planet.position);
+        distanceplaycooldown = (distance - 4000) / 10000;
+        distancetimer += Time.deltaTime;
 
+        if(distancetimer >= distanceplaycooldown)
+        {
+            DistanceX = (planet.position.z - transform.position.z);
+            if(DistanceX > 6000)
+            {
+                DistanceAudioSource.panStereo = 1;
+            }
+            else if (DistanceX<=6000 && DistanceX > 5000)
+            {
+                DistanceAudioSource.panStereo = .85f;
+            }
+            else if (DistanceX<=5000 && DistanceX > 3500)
+            {
+                DistanceAudioSource.panStereo = .75f;
+            }
+            else if (DistanceX<=3500 && DistanceX > 2000)
+            {
+                DistanceAudioSource.panStereo = .50f;
+            }
+            else if (DistanceX<=2000 && DistanceX > 1000)
+            {
+                DistanceAudioSource.panStereo = .25f;
+            }
+            else if (DistanceX <= 1000 && DistanceX > -1000)
+            {
+                DistanceAudioSource.panStereo = 0;
+            }
+            else if (DistanceX <= -1000 && DistanceX > -2000)
+            {
+                DistanceAudioSource.panStereo = -0.25f;
+            }
+            else if (DistanceX <= -2000 && DistanceX > -3500)
+            {
+                DistanceAudioSource.panStereo = -0.50f;
+            }
+            else if (DistanceX <= -3500 && DistanceX > -5000)
+            {
+                DistanceAudioSource.panStereo = -0.75f;
+            }
+            else if (DistanceX <=5000)
+            {
+                DistanceAudioSource.panStereo = -0.50f;
+            }
+
+            DistanceAudioSource.PlayOneShot(Distancesound, DistanceVolume);
+            distancetimer = 0;
+        }
+
+        EngineAudioSource.volume = currentSpeed / 1000;
+
+        if (currentFuel <= 90 && AS90 == false)
+        {
+            AIAudioSource.PlayOneShot(AI90);
+            AS90 = true;
+        }
+        if (currentFuel <= 80 && AS80 == false)
+        {
+            AIAudioSource.PlayOneShot(AI80);
+            AS80 = true;
+        }
+        if (currentFuel <= 70 && AS70 == false)
+        {
+            AIAudioSource.PlayOneShot(AI70);
+            AS70 = true;
+        }
+        if (currentFuel <= 60 && AS60 == false)
+        {
+            AIAudioSource.PlayOneShot(AI60);
+            AS60 = true;
+        }
+        if (currentFuel <= 50 && AS50 == false)
+        {
+            AIAudioSource.PlayOneShot(AI50);
+            AS50 = true;
+        }
+        if (currentFuel <= 40 && AS40 == false)
+        {
+            AIAudioSource.PlayOneShot(AI40);
+            AS40 = true;
+        }
+        if (currentFuel <= 30 && AS30 == false)
+        {
+            AIAudioSource.PlayOneShot(AI30);
+            AS30 = true;
+        }
+        if (currentFuel <= 20 && AS20 == false)
+        {
+            AIAudioSource.PlayOneShot(AI20);
+            AS20 = true;
+        }
+        if (currentFuel <= 10 && AS10 == false)
+        {
+            AIAudioSource.PlayOneShot(AI10);
+            AS10 = true;
+        }
+        if (currentFuel <= 0 && AS00 == false)
+        {
+            AIAudioSource.PlayOneShot(AI00);
+            //if you comment the next line the game gets super spooky >:3c
+            AS00 = true;
+        }
+       
     }
 
     void MissCheck()
     {
         if (transform.position.y > planet.position.y + allowedDistanceBeyondPlanetCenterPoint)
         {
-            Restart();
+            EndAudioSource.PlayOneShot(miss);
+            FailTimer += Time.deltaTime;
+            if (FailTimer >= 3)
+            {
+                Restart();
+            }
+            
         }
         else if (Vector3.Distance(transform.position, planet.position) > allowedDistanceFromPlanetCenter)
         {
-            Restart();
+            EndAudioSource.PlayOneShot(miss);
+            FailTimer += Time.deltaTime;
+            if (FailTimer >= 3)
+            {
+                Restart();
+            }
         }
 
 
@@ -91,11 +251,12 @@ public class SpaceshipMovement : MonoBehaviour
         {
             currentFuel -= fuelDrainagePerSecond * Time.deltaTime;
             currentSpeed -= deacceleration * Time.deltaTime;
+            FuelAudioSource.volume = 1;
         }
         else
         {
             currentSpeed += acceleration * Time.deltaTime;
-
+            FuelAudioSource.volume = 0;
             if (currentSpeed > maxSpeed)
             {
                 currentSpeed = maxSpeed;
@@ -128,8 +289,12 @@ public class SpaceshipMovement : MonoBehaviour
         if (currentSpeed > allowedSpeedUponImpact)
         {
             //Explode and Restart
-            Restart();
-
+            EndAudioSource.PlayOneShot(crash);
+            FailTimer += Time.deltaTime;
+            if (FailTimer >= 3)
+            {
+                Restart();
+            }
 
         }
         else
