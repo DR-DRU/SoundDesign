@@ -1091,6 +1091,10 @@ MonoBehaviour:
   crash: {fileID: 8300000, guid: b543da776a3403c459a733d55dc18343, type: 3}
   win: {fileID: 8300000, guid: 70cdb5b52b677d1419b1e59f6209f6e4, type: 3}
   failed: 0
+  maxMoonScale: {x: 0.1, y: 0.1, z: 0.1}
+  maxLeftPosition: {x: -5, y: -189.5, z: 0}
+  maxRightPosition: {x: 61, y: -189.5, z: 0}
+  midPosition: {x: 27.4, y: -189.5, z: 0}
 --- !u!65 &963194230
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1363,7 +1367,7 @@ RectTransform:
   m_GameObject: {fileID: 1291654265}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.05138883, y: 0.05138883, z: 0.05138883}
+  m_LocalScale: {x: 0.048287515, y: 0.048287515, z: 0.048287515}
   m_Children: []
   m_Father: {fileID: 1452640989}
   m_RootOrder: 6

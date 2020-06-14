@@ -84,6 +84,13 @@ public class SpaceshipMovement : MonoBehaviour
 
     private bool AS;
 
+    Vector3 moonStartingscale;
+    float startingDistanceFromMoon;
+    public Vector3 maxMoonScale;
+    public Vector3 maxLeftPosition; // -5
+    public Vector3 maxRightPosition; // 61
+    public Vector3 midPosition;  //27.4 -189.5
+
     // Start is called before the first frame update
     void Start()
     {
@@ -94,6 +101,9 @@ public class SpaceshipMovement : MonoBehaviour
 
         currentFuel = startingFuel;
         currentSpeed = startSpeed;
+
+        startingDistanceFromMoon = Vector3.Distance(transform.position, planet.position);
+        moonStartingscale = moonIcon.transform.localScale;
     }
 
     // Update is called once per frame
@@ -113,6 +123,7 @@ public class SpaceshipMovement : MonoBehaviour
         speedBar.fillAmount = currentSpeed / maxSpeed;
         fuelBar.fillAmount = currentFuel / startingFuel;
 
+   
         //Vector3 angleHelp = transform.InverseTransformPoint(planet.position);
         //float angle = Vector3.Angle(transform.position, planet.position);
         // float angle = Vector3.Angle(Vector3.zero, someLocalVector);
@@ -120,12 +131,25 @@ public class SpaceshipMovement : MonoBehaviour
         //Vector3 toPosition = (planet.position - transform.position);
         //float angle = Vector3.Angle(transform.forward, toPosition);
 
-        float angle = Vector3.SignedAngle(planet.position - transform.position, transform.forward, Vector3.up);
+        float angle = Vector3.SignedAngle(planet.position - transform.position, transform.forward, Vector3.forward);
         //float angle = Vector3.Angle(transform.forward, planet.position - transform.position);
 
+        moonIcon.transform.localScale = moonStartingscale + ((startingDistanceFromMoon   /  Vector3.Distance(transform.position, planet.position)) * (maxMoonScale - moonStartingscale));
 
         print(angle);
-         
+
+
+        if (Mathf.Abs(angle) > 90)
+        {
+            moonIcon.enabled = false;
+        }
+        else
+        {
+            moonIcon.enabled = true;
+
+            moonIcon.transform.localPosition = midPosition - (maxLeftPosition - midPosition) * (angle / 90);
+        }
+
 
         distance = Vector3.Distance(transform.position, planet.position);
         distanceplaycooldown = (distance - 4000) / 10000;
