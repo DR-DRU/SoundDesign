@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SpaceshipMovement : MonoBehaviour
 {
@@ -71,6 +72,10 @@ public class SpaceshipMovement : MonoBehaviour
     public AudioClip crash;
     public AudioClip win;
 
+    public bool failed;
+
+    private bool AS;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -86,7 +91,7 @@ public class SpaceshipMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!landed)
+        if (!landed && !failed)
         {
             Movement();
         }
@@ -202,14 +207,27 @@ public class SpaceshipMovement : MonoBehaviour
             //if you comment the next line the game gets super spooky >:3c
             AS00 = true;
         }
-       
+       if (failed == true)
+        {
+            FailTimer += Time.deltaTime;
+            if (FailTimer >= 3)
+            {
+                Restart();
+            }
+        }
     }
 
     void MissCheck()
     {
         if (transform.position.y > planet.position.y + allowedDistanceBeyondPlanetCenterPoint)
         {
-            EndAudioSource.PlayOneShot(miss);
+            if (AS == false)
+            {
+                EndAudioSource.PlayOneShot(miss);
+                AS = true;
+            }
+            failed = true;
+            DistanceAudioSource.volume = 0;
             FailTimer += Time.deltaTime;
             if (FailTimer >= 3)
             {
@@ -219,7 +237,13 @@ public class SpaceshipMovement : MonoBehaviour
         }
         else if (Vector3.Distance(transform.position, planet.position) > allowedDistanceFromPlanetCenter)
         {
-            EndAudioSource.PlayOneShot(miss);
+            if (AS == false)
+            {
+                EndAudioSource.PlayOneShot(miss);
+                AS = true;
+            }
+            failed = true;
+            DistanceAudioSource.volume = 0;
             FailTimer += Time.deltaTime;
             if (FailTimer >= 3)
             {
@@ -274,13 +298,14 @@ public class SpaceshipMovement : MonoBehaviour
 
     void Restart()
     {
-        transform.position = startingPosition;
+        /*transform.position = startingPosition;
         transform.eulerAngles = startingRotation;
 
 
 
         currentFuel = startingFuel;
-        currentSpeed = startSpeed;
+        currentSpeed = startSpeed;*/
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
 
@@ -289,12 +314,14 @@ public class SpaceshipMovement : MonoBehaviour
         if (currentSpeed > allowedSpeedUponImpact)
         {
             //Explode and Restart
-            EndAudioSource.PlayOneShot(crash);
-            FailTimer += Time.deltaTime;
-            if (FailTimer >= 3)
+            if (AS == false)
             {
-                Restart();
+                EndAudioSource.PlayOneShot(crash);
+                AS = true;
             }
+            failed = true;
+            DistanceAudioSource.volume = 0;
+            
 
         }
         else
