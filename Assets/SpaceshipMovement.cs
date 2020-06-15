@@ -16,7 +16,7 @@ public class SpaceshipMovement : MonoBehaviour
     public float allowedDistanceFromPlanetCenter;
     public float rotationalSpeed;
     public float fuelDrainagePerSecond;
-    float currentSpeed;
+    public float currentSpeed;
     float currentFuel;
     Vector3 startingPosition;
     Vector3 startingRotation;
@@ -171,7 +171,7 @@ public class SpaceshipMovement : MonoBehaviour
         if(distancetimer >= distanceplaycooldown)
         {
     
-            DistanceX = (planet.position.x - transform.position.x);
+            /*DistanceX = (planet.position.x - transform.position.x);
             if(DistanceX > 6000)
             {
                 DistanceAudioSource.panStereo = 1;
@@ -211,7 +211,29 @@ public class SpaceshipMovement : MonoBehaviour
             else if (DistanceX <=5000)
             {
                 DistanceAudioSource.panStereo = -0.50f;
+            }*/
+
+            if(angle <= 5 && angle >= -5)
+            {
+                DistanceAudioSource.panStereo = 0;
             }
+            else if (angle > 5 && angle <= 10)
+            {
+                DistanceAudioSource.panStereo = .5f;
+            }
+            else if (angle > 10)
+            {
+                DistanceAudioSource.panStereo = 1;
+            }
+            else if (angle < -5 && angle >= -10)
+            {
+                DistanceAudioSource.panStereo = -0.5f;
+            }
+            else if (angle < -10)
+            {
+                DistanceAudioSource.panStereo = -1;
+            }
+
 
             DistanceAudioSource.PlayOneShot(Distancesound, DistanceVolume);
             distancetimer = 0;
@@ -395,6 +417,12 @@ public class SpaceshipMovement : MonoBehaviour
         }
         else
         {
+            DistanceAudioSource.volume = 0;
+            if (AS == false)
+            {
+                EndAudioSource.PlayOneShot(win);
+                AS = true;
+            }
             landed = true;
             currentSpeed = 0;
         }

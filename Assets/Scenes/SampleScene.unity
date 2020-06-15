@@ -502,13 +502,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 440185634}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4000, y: 20000, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 5000, y: 20000, z: 0}
   m_LocalScale: {x: 9374.783, y: 9374.783, z: 9374.783}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &457025998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1056,11 +1056,12 @@ MonoBehaviour:
   maxSpeed: 1000
   acceleration: 30
   deacceleration: 50
-  allowedSpeedUponImpact: 100
+  allowedSpeedUponImpact: 200
   allowedDistanceBeyondPlanetCenterPoint: 1000
   allowedDistanceFromPlanetCenter: 100000
   rotationalSpeed: 0.025
   fuelDrainagePerSecond: 4
+  currentSpeed: 0
   speedText: {fileID: 1174909778}
   fuelText: {fileID: 1764627381}
   rightArrow: {fileID: 215405394}
@@ -1070,7 +1071,7 @@ MonoBehaviour:
   moonIcon: {fileID: 1291654267}
   planet: {fileID: 440185638}
   DistanceAudioSource: {fileID: 457025999}
-  Distancesound: {fileID: 8300000, guid: 7bd76b00d348f0e4ba5f64e97e5b312c, type: 3}
+  Distancesound: {fileID: 8300000, guid: c8a8b771933a84142a7b7f40b25d416c, type: 3}
   DistanceVolume: 1
   DistanceX: 0
   EngineAudioSource: {fileID: 693765248}
